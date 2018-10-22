@@ -9,10 +9,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.test.springDemo.SpringBoot_Rest_Mongo.model.Student;
 import com.test.springDemo.SpringBoot_Rest_Mongo.repository.StudentRepository;
-
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,6 +27,7 @@ public class StudentController {
 		return studentRepository.findAll();
 
 	}
+
 
 	@RequestMapping(value = "/saveStudent", method = RequestMethod.POST)
 	public void saveStudent(Student student) {
