@@ -6,11 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.test.springDemo.SpringBoot_Rest_Mongo.GradeSheetServiceProxy;
+import com.test.springDemo.SpringBoot_Rest_Mongo.model.GradeSheetBean;
 import com.test.springDemo.SpringBoot_Rest_Mongo.model.Student;
 import com.test.springDemo.SpringBoot_Rest_Mongo.repository.StudentRepository;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class StudentController {
 
 	private StudentRepository studentRepository;
+	private GradeSheetServiceProxy gradeSheetServiceProxy;
 
 	@RequestMapping(value = "/getAllStudents", method = RequestMethod.GET)
 	public List<Student> getAllStudents() {
@@ -72,5 +78,10 @@ public class StudentController {
 		if (studToDelete != null) {
 			studentRepository.delete(studToDelete);
 		}
+	}
+	
+	@RequestMapping(value = "/getStudentGradeSheet/{semester}", method = RequestMethod.POST)
+	public GradeSheetBean getStudentGradeSheet(@PathVariable("semester") String semester) {
+		return gradeSheetServiceProxy.getStudentGradeInfo(semester);
 	}
 }
