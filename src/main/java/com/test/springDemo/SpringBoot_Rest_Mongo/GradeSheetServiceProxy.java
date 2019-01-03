@@ -9,11 +9,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.test.springDemo.SpringBoot_Rest_Mongo.model.GradeSheetBean;
 
 
-@FeignClient(name="grade-sheet-service")
+//@FeignClient(name="grade-sheet-service")
+@FeignClient(name="zuulgateway")
 @RibbonClient(name="grade-sheet-service")
 public interface GradeSheetServiceProxy {
 	
-	@RequestMapping(value = "/getStudentGradeInfo/{semester}", method = RequestMethod.POST)
+	@RequestMapping(value = "grade-sheet-service/getStudentGradeInfo/{semester}", method = RequestMethod.POST)
 	public GradeSheetBean getStudentGradeInfo(@PathVariable("semester") String semester) ;
 
 }

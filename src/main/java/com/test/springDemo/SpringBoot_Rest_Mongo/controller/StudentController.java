@@ -2,6 +2,8 @@ package com.test.springDemo.SpringBoot_Rest_Mongo.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.test.springDemo.SpringBoot_Rest_Mongo.GradeSheetServiceProxy;
 import com.test.springDemo.SpringBoot_Rest_Mongo.model.GradeSheetBean;
 import com.test.springDemo.SpringBoot_Rest_Mongo.model.Student;
@@ -25,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(onConstructor_ = { @Autowired })
 public class StudentController {
 
+	
 	private StudentRepository studentRepository;
 	private GradeSheetServiceProxy gradeSheetServiceProxy;
 
@@ -81,7 +85,14 @@ public class StudentController {
 	}
 	
 	@RequestMapping(value = "/getStudentGradeSheet/{semester}", method = RequestMethod.POST)
+	@HystrixCommand(fallbackMethod="fallbackRetriveConfig")
 	public GradeSheetBean getStudentGradeSheet(@PathVariable("semester") String semester) {
+		log.info("StudentController:getStudentGradeSheet");
 		return gradeSheetServiceProxy.getStudentGradeInfo(semester);
 	}
+	
+	public GradeSheetBean fallbackRetriveConfig() {
+		return new GradeSheetBean();
+	}
+	
 }
